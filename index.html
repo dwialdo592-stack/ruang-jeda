@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f0">
+  <meta name="description" content="Ruang Jeda membantu membangun kebiasaan digital yang lebih seimbang melalui pencatatan waktu, pengingat istirahat, dan jadwal kegiatan sederhana.">
+  <title>Ruang Jeda — Pelan-pelan, kembali seimbang</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --paper: #f5f6f0;
+      --card: #ffffff;
+      --ink: #253b37;
+      --muted: #7d8982;
+      --line: #e7ebe3;
+      --green: #477568;
+      --green-dark: #315b50;
+      --mint: #e5f0e9;
+      --sage: #d8e5d8;
+      --peach: #f6e8dc;
+      --yellow: #f4edcf;
+      --rose: #f3e5e2;
+      --shadow: 0 14px 44px rgba(52, 75, 65, .07);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app-shell { max-width: 1240px; margin: 0 auto; padding: 24px 28px 48px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:28px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { width:44px; height:44px; display:grid; place-items:center; border-radius:15px; background:var(--green-dark); color:#fff; box-shadow:0 7px 16px #315b502a; }
+    .brand-mark svg { width:24px; height:24px; }
+    .brand-name { font-size:16px; font-weight:800; letter-spacing:.02em; }
+    .brand-sub { display:block; margin-top:2px; color:var(--muted); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+    .top-actions { display:flex; gap:10px; align-items:center; }
+    .date-chip { color:var(--muted); font-size:13px; padding:10px 13px; border:1px solid var(--line); background:#ffffffa8; border-radius:99px; }
+    .btn { display:inline-flex; justify-content:center; align-items:center; gap:8px; border:0; border-radius:13px; padding:11px 15px; font-weight:700; font-size:13px; transition:transform .18s ease, background .18s ease; }
+    .btn:hover { transform:translateY(-1px); }
+    .btn-primary { background:var(--green-dark); color:white; }
+    .btn-primary:hover { background:#254b41; }
+    .btn-soft { background:var(--mint); color:var(--green-dark); }
+    .btn-quiet { color:var(--green-dark); background:transparent; border:1px solid var(--line); }
+    .btn-danger { background:var(--rose); color:#915c54; }
+    .hero { display:grid; grid-template-columns:1.45fr .8fr; gap:18px; margin-bottom:18px; }
+    .hero-main { position:relative; overflow:hidden; min-height:260px; padding:32px 34px; background:#e6eee5; border-radius:28px; }
+    .hero-main:after { content:""; position:absolute; width:250px; height:250px; right:-38px; bottom:-112px; border:1px solid #a9c1af80; border-radius:50%; box-shadow:0 0 0 24px #a9c1af22,0 0 0 50px #a9c1af18; }
+    .eyebrow { color:var(--green); font-size:11px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+    h1 { max-width:570px; margin:12px 0 10px; font-family:Georgia, "Times New Roman", serif; font-size:clamp(34px,4.2vw,52px); line-height:1.06; letter-spacing:-.035em; font-weight:500; }
+    .hero-copy { max-width:480px; margin:0; color:#64756b; line-height:1.7; font-size:14px; }
+    .hero-quote { display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-top:24px; max-width:520px; }
+    .quote-text { font-family:Georgia,serif; color:#48665b; font-size:16px; font-style:italic; }
+    .hero-sun { flex-shrink:0; width:68px; height:68px; border-radius:50%; display:grid; place-items:center; background:#f4e9cf; color:#9b8a5e; }
+    .hero-sun svg { width:30px; height:30px; }
+    .prompt-card { background:var(--card); border:1px solid var(--line); border-radius:28px; padding:25px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow); }
+    .prompt-top { display:flex; align-items:center; justify-content:space-between; color:var(--muted); font-size:12px; }
+    .sparkle { width:36px; height:36px; display:grid; place-items:center; border-radius:12px; background:var(--yellow); color:#9a8854; font-size:19px; }
+    .prompt-card h2 { margin:22px 0 8px; font-family:Georgia,serif; font-weight:500; font-size:25px; line-height:1.2; }
+    .prompt-card p { margin:0 0 18px; color:var(--muted); font-size:13px; line-height:1.6; }
+    .section-title { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:28px 2px 13px; }
+    .section-title h2 { margin:0; font-family:Georgia,serif; font-weight:500; font-size:25px; letter-spacing:-.02em; }
+    .section-title p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    .dashboard { display:grid; grid-template-columns:1.1fr .9fr .9fr; gap:14px; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:21px; box-shadow:var(--shadow); }
+    .panel-label { color:var(--muted); font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    .usage-top { display:flex; justify-content:space-between; align-items:start; gap:12px; }
+    .usage-number { margin:15px 0 1px; font-size:38px; font-weight:750; letter-spacing:-.05em; }
+    .usage-number small { color:var(--muted); font-weight:500; font-size:15px; letter-spacing:0; }
+    .usage-caption { color:var(--muted); font-size:12px; }
+    .usage-icon { display:grid; place-items:center; width:39px; height:39px; border-radius:13px; background:var(--mint); color:var(--green-dark); }
+    .usage-icon svg { width:19px; height:19px; }
+    .progress-track { height:9px; overflow:hidden; background:#edf0eb; border-radius:99px; margin:17px 0 8px; }
+    .progress-fill { width:0%; height:100%; border-radius:99px; background:linear-gradient(90deg,#88aa91,#477568); transition:width .35s ease; }
+    .progress-meta { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; }
+    .stat-big { margin:16px 0 6px; font-size:32px; font-weight:750; letter-spacing:-.04em; }
+    .stat-note { color:var(--muted); font-size:12px; line-height:1.5; }
+    .stat-pill { display:inline-flex; gap:6px; align-items:center; padding:6px 9px; background:var(--peach); color:#956b50; border-radius:99px; font-size:10px; font-weight:700; }
+    .notice { display:none; gap:12px; align-items:flex-start; margin-top:14px; padding:14px 16px; border:1px solid #ead6c7; background:#fbf0e7; border-radius:16px; color:#765743; }
+    .notice.show { display:flex; }
+    .notice strong { display:block; font-size:13px; margin-bottom:3px; }
+    .notice p { margin:0; font-size:12px; line-height:1.55; }
+    .content-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:16px; }
+    .activity-list { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+    .activity-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; background:#fafbf8; border:1px solid #eff1ec; border-radius:15px; }
+    .activity-left { display:flex; align-items:center; gap:10px; min-width:0; }
+    .activity-emoji { width:36px; height:36px; flex-shrink:0; display:grid; place-items:center; border-radius:12px; background:var(--mint); font-size:17px; }
+    .activity-name { font-size:13px; font-weight:750; }
+    .activity-sub { color:var(--muted); font-size:11px; margin-top:3px; }
+    .activity-time { font-size:13px; font-weight:800; white-space:nowrap; }
+    .empty { color:var(--muted); font-size:12px; padding:18px 10px; text-align:center; background:#fafbf8; border-radius:14px; }
+    .schedule-list { display:flex; flex-direction:column; gap:0; margin-top:13px; }
+    .schedule-item { display:flex; gap:13px; position:relative; padding:12px 0; border-bottom:1px solid #eff1ec; }
+    .schedule-item:last-child { border-bottom:0; }
+    .schedule-time { width:54px; flex-shrink:0; color:var(--green); font-size:11px; font-weight:800; padding-top:3px; }
+    .schedule-check { width:19px; height:19px; flex-shrink:0; accent-color:var(--green); margin:1px 0 0; }
+    .schedule-text { flex:1; min-width:0; }
+    .schedule-name { font-size:13px; font-weight:750; }
+    .schedule-desc { margin-top:3px; font-size:11px; color:var(--muted); line-height:1.5; }
+    .schedule-item.done .schedule-name { text-decoration:line-through; color:#9ba59e; }
+    .schedule-item.done .schedule-desc { color:#aab2ac; }
+    .schedule-foot { display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:11px; margin-top:10px; }
+    .quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:15px; }
+    .quick-card { border:1px solid var(--line); border-radius:16px; padding:13px 10px; background:#fbfcfa; text-align:left; color:var(--ink); transition:all .18s ease; }
+    .quick-card:hover { transform:translateY(-2px); border-color:#c6d8cc; background:#f2f7f2; }
+    .quick-card span { display:block; font-size:19px; margin-bottom:7px; }
+    .quick-card b { display:block; font-size:11px; }
+    .quick-card small { display:block; margin-top:3px; color:var(--muted); font-size:10px; }
+    .bottom-note { display:flex; align-items:center; justify-content:space-between; gap:15px; color:var(--muted); font-size:11px; margin-top:25px; padding:16px 2px 0; border-top:1px solid var(--line); }
+    .bottom-note b { color:var(--green-dark); }
+    .modal-backdrop { position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center; padding:20px; background:#1c312b80; backdrop-filter:blur(7px); }
+    .modal-backdrop.open { display:flex; }
+    .modal { width:min(100%,440px); background:var(--card); border-radius:24px; padding:25px; box-shadow:0 30px 90px #13221d40; animation:rise .2s ease both; }
+    @keyframes rise { from { opacity:0; transform:translateY(10px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+    .modal-head h3 { margin:0; font-family:Georgia,serif; font-size:25px; font-weight:500; }
+    .close-btn { border:0; width:33px; height:33px; border-radius:50%; background:#f1f3ee; color:var(--muted); font-size:18px; }
+    .field { margin:13px 0; }
+    .field label { display:block; margin-bottom:7px; font-size:12px; font-weight:750; color:#52635a; }
+    .field input,.field select { width:100%; border:1px solid var(--line); background:#fbfcfa; border-radius:12px; padding:12px 13px; color:var(--ink); outline:none; }
+    .field input:focus,.field select:focus { border-color:#8eae9a; box-shadow:0 0 0 3px #e5f0e9; }
+    .field-hint { font-size:10px; color:var(--muted); margin-top:6px; }
+    .modal-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:20px; }
+    .timer-circle { width:174px; height:174px; border:8px solid var(--mint); border-top-color:var(--green); border-radius:50%; display:grid; place-items:center; margin:23px auto; text-align:center; }
+    .timer-number { font-size:34px; font-weight:800; letter-spacing:-.04em; }
+    .timer-label { color:var(--muted); font-size:11px; }
+    .breath-message { text-align:center; color:var(--muted); font-size:13px; line-height:1.6; }
+    .toast { position:fixed; z-index:40; bottom:22px; left:50%; transform:translate(-50%,20px); opacity:0; pointer-events:none; background:#263e36; color:white; padding:12px 17px; border-radius:99px; box-shadow:var(--shadow); font-size:12px; transition:all .25s ease; max-width:calc(100% - 30px); text-align:center; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    .small-link { border:0; padding:0; color:var(--green); background:transparent; font-weight:750; font-size:11px; }
+    @media (max-width:850px) { .hero { grid-template-columns:1fr; } .prompt-card { min-height:210px; } .dashboard { grid-template-columns:1fr 1fr; } .usage-panel { grid-column:1/-1; } .content-grid { grid-template-columns:1fr; } }
+    @media (max-width:560px) { .app-shell { padding:16px 14px 32px; } .topbar { margin-bottom:17px; } .date-chip { display:none; } .top-actions .btn { padding:10px 11px; font-size:11px; } .hero-main { min-height:260px; padding:25px 22px; } .hero-main:after { right:-110px; } .hero-quote { align-items:flex-start; } .hero-sun { width:52px; height:52px; } .prompt-card { padding:21px; } .dashboard { grid-template-columns:1fr 1fr; gap:10px; } .panel { padding:16px; } .usage-panel { grid-column:1/-1; } .stat-big { font-size:27px; } .section-title { margin-top:23px; } .section-title h2 { font-size:22px; } .quick-actions { gap:7px; } .quick-card { padding:11px 8px; } .bottom-note { align-items:flex-start; flex-direction:column; } }
+    @media (prefers-reduced-motion: reduce) { *,*:before,*:after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20c4.5-2.3 6.5-6.3 6.5-10.4C14 9.7 10.8 12.3 12 20Z"/><path d="M12 20C7.5 17.7 5.5 13.7 5.5 9.6 10 9.7 13.2 12.3 12 20Z"/><path d="M12 20V8"/></svg></div>
+        <div><div class="brand-name">RUANG JEDA</div><span class="brand-sub">digital wellbeing journal</span></div>
+      </div>
+      <div class="top-actions">
+        <span class="date-chip" id="todayLabel">Hari ini</span>
+        <button class="btn btn-soft" id="notifyBtn" type="button">♧ Aktifkan pengingat</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Sambutan">
+        <div class="hero-main">
+          <div class="eyebrow">RUANG UNTUK DIRIMU HARI INI</div>
+          <h1>Pelan-pelan,<br>kembali seimbang.</h1>
+          <p class="hero-copy">Kamu tidak harus berubah dalam satu hari. Mulai dengan satu jeda kecil, satu pilihan baik, dan sedikit waktu untuk dirimu sendiri.</p>
+          <div class="hero-quote"><div class="quote-text" id="dailyQuote">“Kemajuan kecil tetaplah kemajuan.”</div><div class="hero-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></div></div>
+        </div>
+        <aside class="prompt-card">
+          <div class="prompt-top"><span>✦ SARAN SAAT KAMU MEMBUKA</span><span class="sparkle">✧</span></div>
+          <div><h2 id="promptTitle">Sebelum mulai, tarik napas.</h2><p id="promptText">Letakkan ponsel sejenak. Rasakan tubuhmu, lalu pilih satu kegiatan kecil yang ingin kamu lakukan.</p></div>
+          <button class="btn btn-primary" id="promptAction" type="button">Mulai jeda 1 menit <span>→</span></button>
+        </aside>
+      </section>
+
+      <div class="section-title"><div><h2>Gambaran harimu</h2><p>Kenali kebiasaanmu tanpa menghakimi diri sendiri.</p></div><span class="stat-pill">● MODE SIMULASI</span></div>
+      <section class="dashboard" aria-label="Ringkasan penggunaan">
+        <article class="panel usage-panel">
+          <div class="usage-top"><div><div class="panel-label">Waktu layar tercatat</div><div class="usage-number" id="usageTotal">0j 00m <small>/ 5j</small></div><div class="usage-caption">Target pengingat: 5 jam per hari</div></div><div class="usage-icon">◷</div></div>
+          <div class="progress-track" role="progressbar" aria-label="Persentase batas penggunaan" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="usageProgress"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-meta"><span id="progressText">0% dari batas harian</span><span id="remainingText">5j tersisa</span></div>
+          <div class="notice" id="limitNotice" role="status"><div>☁</div><div><strong>Waktunya mengambil jeda.</strong><p>Kamu sudah mencapai batas 5 jam. Coba istirahat sejenak, minum air, atau lakukan kegiatan di luar layar.</p></div></div>
+        </article>
+        <article class="panel">
+          <div class="usage-top"><div class="panel-label">Sesi tercatat hari ini</div><div class="usage-icon" style="background:var(--peach);color:#94684c">↗</div></div>
+          <div class="stat-big" id="sessionCount">0</div><div class="stat-note">Sesi penggunaan yang kamu tambahkan ke jurnal hari ini.</div>
+        </article>
+        <article class="panel">
+          <div class="usage-top"><div class="panel-label">Kegiatan di luar layar</div><div class="usage-icon" style="background:var(--yellow);color:#98874e">✿</div></div>
+          <div class="stat-big" id="taskCount">0/5</div><div class="stat-note">Kegiatan sederhana yang sudah kamu selesaikan hari ini.</div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <div>
+          <div class="section-title"><div><h2>Catatan penggunaan</h2><p>Tambahkan durasi secara manual untuk demonstrasi.</p></div><button class="small-link" id="addUsageBtn" type="button">+ Tambah catatan</button></div>
+          <article class="panel">
+            <div class="panel-label">Aktivitas digital hari ini</div>
+            <div class="activity-list" id="activityList"><div class="empty">Belum ada catatan. Tambahkan aktivitas untuk melihat ringkasanmu.</div></div>
+            <div class="quick-actions" aria-label="Tambah durasi simulasi">
+              <button class="quick-card" type="button" data-category="Media sosial" data-minutes="30"><span>💬</span><b>Media sosial</b><small>+30 menit</small></button>
+              <button class="quick-card" type="button" data-category="Video" data-minutes="30"><span>▶️</span><b>Menonton video</b><small>+30 menit</small></button>
+              <button class="quick-card" type="button" data-category="Game" data-minutes="30"><span>🎮</span><b>Bermain game</b><small>+30 menit</small></button>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:15px"><span class="field-hint">Data disimpan di perangkat ini.</span><button class="small-link" id="resetBtn" type="button">Reset data simulasi</button></div>
+          </article>
+        </div>
+        <div>
+          <div class="section-title"><div><h2>Rencana hari ini</h2><p>Saran kecil agar waktumu lebih berwarna.</p></div></div>
+          <article class="panel">
+            <div class="panel-label">Checklist kegiatan non-digital</div>
+            <div class="schedule-list" id="scheduleList">
+              <label class="schedule-item"><input class="schedule-check" type="checkbox" data-task="0"><span class="schedule-time">PAGI</span><span class="schedule-text"><span class="schedule-name">Rapikan tempat tidur</span><span class="schedule-desc">Mulai hari dengan ruang yang lebih nyaman.</span></span></label>
+              <label class="schedule-item"><input class="schedule-check" type="checkbox" data-task="1"><span class="schedule-time">PAGI</span><span class="schedule-text"><span class="schedule-name">Jalan santai atau peregangan</span><span class="schedule-desc">Bergerak ringan dan menikmati udara segar.</span></span></label>
+              <label class="schedule-item"><input class="schedule-check" type="checkbox" data-task="2"><span class="schedule-time">SIANG</span><span class="schedule-text"><span class="schedule-name">Belajar 25 menit</span><span class="schedule-desc">Fokus pada satu tugas tanpa membuka media sosial.</span></span></label>
+              <label class="schedule-item"><input class="schedule-check" type="checkbox" data-task="3"><span class="schedule-time">SORE</span><span class="schedule-text"><span class="schedule-name">Lakukan hobi offline</span><span class="schedule-desc">Membaca, menggambar, memasak, atau berkebun.</span></span></label>
+              <label class="schedule-item"><input class="schedule-check" type="checkbox" data-task="4"><span class="schedule-time">MALAM</span><span class="schedule-text"><span class="schedule-name">Waktu santai tanpa layar</span><span class="schedule-desc">Bersiap tidur dan memberi pikiran waktu untuk tenang.</span></span></label>
+            </div>
+            <div class="schedule-foot"><span id="scheduleProgress">0 dari 5 selesai</span><span>Setiap langkah berarti ✦</span></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottom-note"><span><b>RUANG JEDA</b> · Kebiasaan baik tumbuh dari langkah kecil.</span><span>Versi demonstrasi · Tidak memantau aplikasi lain secara otomatis.</span></footer>
+  </div>
+
+  <div class="modal-backdrop" id="usageModal" role="dialog" aria-modal="true" aria-labelledby="usageModalTitle">
+    <div class="modal">
+      <div class="modal-head"><h3 id="usageModalTitle">Tambah catatan</h3><button class="close-btn" data-close="usageModal" aria-label="Tutup">×</button></div>
+      <form id="usageForm">
+        <div class="field"><label for="categoryInput">Jenis aktivitas</label><select id="categoryInput" required><option>Media sosial</option><option>Video</option><option>Game</option><option>Lainnya</option></select></div>
+        <div class="field"><label for="minutesInput">Durasi (menit)</label><input id="minutesInput" type="number" min="1" max="1440" value="30" required><div class="field-hint">Gunakan angka simulasi atau durasi yang kamu catat sendiri.</div></div>
+        <div class="modal-actions"><button class="btn btn-quiet" type="button" data-close="usageModal">Batal</button><button class="btn btn-primary" type="submit">Simpan catatan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="breakModal" role="dialog" aria-modal="true" aria-labelledby="breakTitle">
+    <div class="modal" style="text-align:center">
+      <div class="eyebrow">SEJENAK UNTUK DIRIMU</div><h3 id="breakTitle" style="font:500 29px Georgia,serif;margin:12px 0 0">Tarik napas. Lepaskan.</h3>
+      <div class="timer-circle"><div><div class="timer-number" id="timerNumber">01:00</div><div class="timer-label">waktu jeda</div></div></div>
+      <p class="breath-message" id="breathMessage">Tarik napas perlahan, tahan sebentar, lalu hembuskan dengan lembut.</p>
+      <div class="modal-actions" style="justify-content:center"><button class="btn btn-quiet" id="closeBreakBtn" type="button">Tutup</button><button class="btn btn-primary" id="restartBreakBtn" type="button">Ulangi jeda</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    'use strict';
+    const STORAGE_KEY = 'ruang-jeda-data-v1';
+    const LIMIT_MINUTES = 300;
+    const prompts = [
+      { title: 'Sebelum mulai, tarik napas.', text: 'Letakkan ponsel sejenak. Rasakan tubuhmu, lalu pilih satu kegiatan kecil yang ingin kamu lakukan.', action: 'Mulai jeda 1 menit' },
+      { title: 'Apa yang ingin kamu capai hari ini?', text: 'Pilih satu hal sederhana di luar layar. Tidak perlu sempurna, yang penting kamu memulainya.', action: 'Ambil jeda sebentar' },
+      { title: 'Dunia di luar layar sedang menunggu.', text: 'Coba lihat sekitar, minum air, atau sapa seseorang. Ada banyak hal kecil yang bisa membuat harimu berarti.', action: 'Mulai jeda 1 menit' },
+      { title: 'Kamu berhak beristirahat.', text: 'Tidak semua notifikasi harus dibuka sekarang. Beri dirimu ruang untuk tenang.', action: 'Ambil jeda sebentar' }
+    ];
+    const quotes = ['“Kemajuan kecil tetaplah kemajuan.”','“Kamu yang memegang kendali atas waktumu.”','“Istirahat bukan kemunduran; itu bagian dari perjalanan.”','“Satu pilihan baik hari ini sudah cukup untuk memulai.”'];
+    const icons = { 'Media sosial':'💬', 'Video':'▶️', 'Game':'🎮', 'Lainnya':'📱' };
+    let state = loadState();
+    let breakInterval = null;
+    let breakSeconds = 60;
+    let toastTimeout = null;
+    let notificationShown = false;
+
+    function todayKey() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+    function freshState() { return { date:todayKey(), entries:[], tasks:[false,false,false,false,false], lastLimitNotice:'' }; }
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!saved || saved.date !== todayKey()) return freshState();
+        return { ...freshState(), ...saved, entries:Array.isArray(saved.entries)?saved.entries:[], tasks:Array.isArray(saved.tasks)?saved.tasks:[false,false,false,false,false] };
+      } catch (error) { console.warn('Data lokal tidak dapat dibaca; memulai data baru.', error); return freshState(); }
+    }
+    function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { showToast('Penyimpanan perangkat tidak tersedia.'); } }
+    function ensureToday() { if (state.date !== todayKey()) { state = freshState(); saveState(); } }
+    function totalMinutes() { return state.entries.reduce((sum, item) => sum + item.minutes, 0); }
+    function formatDuration(minutes) { const h=Math.floor(minutes/60), m=minutes%60; return `${h}j ${String(m).padStart(2,'0')}m`; }
+    function formatDate() { return new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); }
+    function escapeHtml(value) { return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+    function render() {
+      ensureToday();
+      const total=totalMinutes(), percent=Math.min(100,Math.round(total/LIMIT_MINUTES*100)), remaining=Math.max(0,LIMIT_MINUTES-total);
+      document.getElementById('todayLabel').textContent=formatDate();
+      document.getElementById('usageTotal').innerHTML=`${formatDuration(total)} <small>/ 5j</small>`;
+      document.getElementById('progressFill').style.width=`${percent}%`;
+      document.getElementById('progressText').textContent=`${percent}% dari batas harian`;
+      document.getElementById('remainingText').textContent=remaining>0?`${formatDuration(remaining)} tersisa`:'Batas tercapai';
+      document.getElementById('usageProgress').setAttribute('aria-valuenow',String(percent));
+      document.getElementById('sessionCount').textContent=state.entries.length;
+      const completed=state.tasks.filter(Boolean).length;
+      document.getElementById('taskCount').textContent=`${completed}/5`;
+      document.getElementById('scheduleProgress').textContent=`${completed} dari 5 selesai`;
+      document.querySelectorAll('.schedule-check').forEach(input=>{ const index=Number(input.dataset.task); input.checked=Boolean(state.tasks[index]); input.closest('.schedule-item').classList.toggle('done',input.checked); });
+      const list=document.getElementById('activityList');
+      if (!state.entries.length) list.innerHTML='<div class="empty">Belum ada catatan. Tambahkan aktivitas untuk melihat ringkasanmu.</div>';
+      else list.innerHTML=state.entries.slice().reverse().map(item=>`<div class="activity-row"><div class="activity-left"><div class="activity-emoji">${icons[item.category]||'📱'}</div><div><div class="activity-name">${escapeHtml(item.category)}</div><div class="activity-sub">${escapeHtml(item.time||'Dicatat hari ini')}</div></div></div><div class="activity-time">${formatDuration(item.minutes)}</div></div>`).join('');
+      const notice=document.getElementById('limitNotice');
+      notice.classList.toggle('show',total>=LIMIT_MINUTES);
+      if (total>=LIMIT_MINUTES && state.lastLimitNotice!==todayKey()) {
+        state.lastLimitNotice=todayKey(); saveState();
+        if ('Notification' in window && Notification.permission==='granted' && !notificationShown) { new Notification('Ruang Jeda — waktunya istirahat',{body:'Kamu sudah mencapai 5 jam. Yuk, ambil jeda sejenak.',icon:'icon.svg'}); notificationShown=true; }
+      }
+    }
+    function showToast(message) { const el=document.getElementById('toast'); el.textContent=message; el.classList.add('show'); clearTimeout(toastTimeout); toastTimeout=setTimeout(()=>el.classList.remove('show'),2500); }
+    function addEntry(category,minutes) {
+      const amount=Number(minutes);
+      if (!Number.isInteger(amount)||amount<1||amount>1440) { showToast('Masukkan durasi antara 1–1440 menit.'); return; }
+      state.entries.push({category,minutes:amount,time:new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit'}).format(new Date())});
+      saveState(); render();
+      showToast(totalMinutes()>=LIMIT_MINUTES?'Batas 5 jam tercapai. Saatnya istirahat.':'Catatan berhasil disimpan.');
+    }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function showOpeningPrompt() {
+      // Prompt dipilih ulang setiap kali halaman dibuka; pilihan tidak disimpan sebagai data pribadi.
+      const prompt=prompts[Math.floor(Math.random()*prompts.length)];
+      document.getElementById('promptTitle').textContent=prompt.title;
+      document.getElementById('promptText').textContent=prompt.text;
+      document.getElementById('promptAction').innerHTML=`${prompt.action} <span>→</span>`;
+      document.getElementById('dailyQuote').textContent=quotes[Math.floor(Math.random()*quotes.length)];
+    }
+    function startBreak() {
+      clearInterval(breakInterval); breakSeconds=60; updateTimer();
+      openModal('breakModal');
+      breakInterval=setInterval(()=>{ breakSeconds--; updateTimer(); if(breakSeconds<=0){clearInterval(breakInterval);document.getElementById('breathMessage').textContent='Bagus. Terima kasih sudah memberi dirimu waktu untuk berhenti sejenak.'; showToast('Jeda selesai. Lanjutkan harimu dengan tenang.');}},1000);
+    }
+    function updateTimer() { const m=Math.floor(breakSeconds/60),s=breakSeconds%60; document.getElementById('timerNumber').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; document.getElementById('breathMessage').textContent=breakSeconds>30?'Tarik napas perlahan, tahan sebentar, lalu hembuskan dengan lembut.':'Lemaskan bahu dan rahang. Kamu tidak perlu terburu-buru.'; }
+
+    document.getElementById('addUsageBtn').addEventListener('click',()=>openModal('usageModal'));
+    document.getElementById('usageForm').addEventListener('submit',event=>{event.preventDefault(); addEntry(document.getElementById('categoryInput').value,document.getElementById('minutesInput').value); closeModal('usageModal');});
+    document.querySelectorAll('.quick-card').forEach(button=>button.addEventListener('click',()=>addEntry(button.dataset.category,button.dataset.minutes)));
+    document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>closeModal(button.dataset.close)));
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop=>backdrop.addEventListener('click',event=>{if(event.target===backdrop)closeModal(backdrop.id);}));
+    document.getElementById('promptAction').addEventListener('click',startBreak);
+    document.getElementById('closeBreakBtn').addEventListener('click',()=>{clearInterval(breakInterval);closeModal('breakModal');});
+    document.getElementById('restartBreakBtn').addEventListener('click',startBreak);
+    document.querySelectorAll('.schedule-check').forEach(input=>input.addEventListener('change',()=>{state.tasks[Number(input.dataset.task)]=input.checked;saveState();render();}));
+    document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Hapus semua catatan dan checklist simulasi hari ini?')){state=freshState();saveState();render();showToast('Data simulasi berhasil direset.');}});
+    document.getElementById('notifyBtn').addEventListener('click',async()=>{
+      if(!('Notification' in window)){showToast('Browser ini belum mendukung notifikasi.');return;}
+      try { const permission=await Notification.requestPermission(); if(permission==='granted'){showToast('Pengingat diizinkan. Notifikasi muncul saat website aktif dan batas tercapai.');if(totalMinutes()>=LIMIT_MINUTES&&!notificationShown){new Notification('Ruang Jeda',{body:'Kamu sudah mencapai batas 5 jam. Istirahat, yuk!',icon:'icon.svg'});notificationShown=true;}} else {showToast('Izin notifikasi belum diberikan.');} }
+      catch(error){console.error(error);showToast('Notifikasi tidak dapat diaktifkan pada browser ini.');}
+    });
+
+    showOpeningPrompt();
+    render();
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') render(); });
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(error=>console.warn('Service worker tidak terdaftar:',error)));
+    }
+  </script>
+</body>
+</html>

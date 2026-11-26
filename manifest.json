@@ -1,0 +1,13 @@
+{
+  "name": "Ruang Jeda — Digital Wellbeing",
+  "short_name": "Ruang Jeda",
+  "description": "Jurnal sederhana untuk membangun kebiasaan digital yang lebih seimbang.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f0",
+  "theme_color": "#f5f6f0",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
